@@ -14,12 +14,12 @@ function startServer(){
 	listenAndConfigMiddleware()
 		.then(() =>{
 			ServerContext = {
-				bucket: new S3(config),
+				s3: new S3(config),
 				jsonResponse: jsonResponse,
 				config: config
 			};
 
-			return ServerContext.bucket.connect();
+			return ServerContext.s3.connect();
 		})
 		.then(()=>{
 			configRoutes();
@@ -50,7 +50,7 @@ function configRoutes(){
 	});
 	
 	let zipFiles = apis.zipFiles.bind(ServerContext);
-	app.get('/zip-files', zipFiles);
+	app.get('/zip-files/:project', zipFiles);
 }
 
 function jsonResponse(res, data, statusCode){
